@@ -81,7 +81,6 @@ import mekanism.common.util.NBTUtils;
 import mekanism.common.util.WorldUtils;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -434,7 +433,7 @@ public class EntityRobit extends PathfinderMob implements IRobit, IMekanismStric
     private ItemStack getItemVariant() {
         ItemStack stack = MekanismItems.ROBIT.asStack();
         IStrictEnergyHandler energyHandlerItem = Capabilities.STRICT_ENERGY.getCapability(ItemAccess.forStack(stack));
-        if (energyHandlerItem != null && energyHandlerItem.getEnergyContainerCount() > 0) {
+        if (energyHandlerItem != null && energyHandlerItem.size() > 0) {
             energyHandlerItem.setEnergy(0, energyContainer.getEnergy());
         }
         ComponentBackedItemHandler stackInventory = Objects.requireNonNull(ContainerType.ITEM.createHandler(stack), "Robit Handler expected");
@@ -486,7 +485,7 @@ public class EntityRobit extends PathfinderMob implements IRobit, IMekanismStric
         output.putBoolean(SerializationConstants.PICKUP_DROPS, getDropPickup());
         output.storeNullable(SerializationConstants.HOME_LOCATION, GlobalPos.CODEC, homeLocation);
         ContainerType.ITEM.saveTo(output, inventorySlots);
-        ContainerType.ENERGY.saveTo(output, getEnergyContainers(null));
+        ContainerType.ENERGY.saveTo(output, getContainers());
         output.putInt(SerializationConstants.PROGRESS, getOperatingTicks());
         output.store(SerializationConstants.SKIN, SKIN_KEY_CODEC, getSkin());
     }
@@ -500,7 +499,7 @@ public class EntityRobit extends PathfinderMob implements IRobit, IMekanismStric
         setDropPickup(input.getBooleanOr(SerializationConstants.PICKUP_DROPS, getDropPickup()));
         homeLocation = input.read(SerializationConstants.HOME_LOCATION, GlobalPos.CODEC).orElse(null);
         ContainerType.ITEM.readFrom(input, inventorySlots);
-        ContainerType.ENERGY.readFrom(input, getEnergyContainers(null));
+        ContainerType.ENERGY.readFrom(input, getContainers());
         progress = input.getIntOr(SerializationConstants.PROGRESS, progress);
         setSkin(input.read(SerializationConstants.SKIN, SKIN_KEY_CODEC).orElse(MekanismRobitSkins.BASE), null);
     }
@@ -606,8 +605,8 @@ public class EntityRobit extends PathfinderMob implements IRobit, IMekanismStric
 
     @NotNull
     @Override
-    public List<IEnergyContainer> getEnergyContainers(@Nullable Direction side) {
-        return canHandleEnergy() ? energyContainers : Collections.emptyList();
+    public List<IEnergyContainer> getContainers() {
+        return energyContainers;
     }
 
     @Override
