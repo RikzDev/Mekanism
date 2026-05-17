@@ -161,9 +161,9 @@ public class MekanismRenderer {
         }
     }
 
-    public static void color(GuiGraphicsExtractor guiGraphics, @NotNull ChemicalStack chemicalStack) {
-        if (!chemicalStack.isEmpty()) {
-            color(guiGraphics, chemicalStack.getChemicalTint(), 1F);
+    public static void color(GuiGraphicsExtractor guiGraphics, @NotNull TypedInstance<Chemical> chemicalStack) {
+        if (!chemicalStack.is(MekanismAPI.EMPTY_CHEMICAL_KEY)) {
+            color(guiGraphics, chemicalStack.typeHolder().value().getTint(), 1F);
         }
     }
 
