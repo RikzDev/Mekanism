@@ -87,8 +87,8 @@ public class FrequencyType<FREQ extends Frequency> {
 
     public FrequencyLookup<FREQ> getLookup(@Nullable UUID owner, SecurityMode securityMode) {
         return switch (securityMode) {
-            case PUBLIC -> getController().getPublicLookup();
-            case PRIVATE -> getController().getPrivateLookup(owner);
+            case PUBLIC -> { FrequencyController<FREQ> ctrl = getController(); yield ctrl == null ? null : ctrl.getPublicLookup(); }
+            case PRIVATE -> { FrequencyController<FREQ> ctrl = getController(); yield ctrl == null ? null : ctrl.getPrivateLookup(owner); }
             case TRUSTED -> getController().getTrustedLookup(owner);
         };
     }
@@ -113,8 +113,8 @@ public class FrequencyType<FREQ extends Frequency> {
 
     public FrequencyLookup<FREQ> getLookup(FrequencyIdentity identity, UUID owner) {
         return switch (identity.securityMode()) {
-            case PUBLIC -> getController().getPublicLookup();
-            case PRIVATE -> getController().getPrivateLookup(owner);
+            case PUBLIC -> { FrequencyController<FREQ> ctrl = getController(); yield ctrl == null ? null : ctrl.getPublicLookup(); }
+            case PRIVATE -> { FrequencyController<FREQ> ctrl = getController(); yield ctrl == null ? null : ctrl.getPrivateLookup(owner); }
             case TRUSTED -> getController().getTrustedLookup(owner);
         };
     }
