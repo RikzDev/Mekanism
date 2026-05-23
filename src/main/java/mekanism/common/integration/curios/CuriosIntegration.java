@@ -35,8 +35,8 @@ public class CuriosIntegration {
     private static void registerRenderers(Holder<Item>... items) {
         for (Holder<Item> holder : items) {
             Item item = holder.value();
-            Equippable equippable = item.components().get(DataComponents.EQUIPPABLE);
-            if (StackUtils.isRenderableArmor(equippable) && IClientItemExtensions.of(item) instanceof ISpecialGear gear) {
+            //DataComponents not bound during init in 26.1 - use instanceof check instead
+            if (IClientItemExtensions.of(item) instanceof ISpecialGear gear) {
                 ICustomArmor customArmor = gear.gearModel();
                 ICurioRenderer.register(item, () -> new MekanismCurioRenderer(customArmor));
             } else {
