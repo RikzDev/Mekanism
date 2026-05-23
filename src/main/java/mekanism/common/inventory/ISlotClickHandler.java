@@ -5,7 +5,6 @@ import java.util.function.Supplier;
 import mekanism.common.lib.inventory.HashedItem;
 import mekanism.common.lib.inventory.HashedItem.UUIDAwareHashedItem;
 import mekanism.common.util.RegistryUtils;
-import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
@@ -14,7 +13,7 @@ import org.jetbrains.annotations.Range;
 
 public interface ISlotClickHandler {
 
-    void onClick(Supplier<@Nullable IScrollableSlot> slotProvider, @MouseButtonInfo.MouseButton int button, boolean hasShiftDown, ItemStack heldItem);
+    void onClick(Supplier<@Nullable IScrollableSlot> slotProvider, int button, boolean hasShiftDown, ItemStack heldItem);
 
     interface IScrollableSlot {
 

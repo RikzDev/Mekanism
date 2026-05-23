@@ -274,7 +274,7 @@ public abstract class TileEntityMekanism extends CapabilityTileEntity implements
     /**
      * Only used on the client
      */
-    private SoundInstance activeSound;
+    private Object activeSound; //Object to avoid client-only SoundInstance on server
     private int playSoundCooldown = 0;
     //End variables ITileSound
 
@@ -1596,7 +1596,7 @@ public abstract class TileEntityMekanism extends CapabilityTileEntity implements
 
             // If this machine isn't fully muffled, and we don't seem to be playing a sound for it, go ahead and
             // play it
-            if (!isFullyMuffled() && (activeSound == null || !Minecraft.getInstance().getSoundManager().isActive(activeSound))) {
+            if (!isFullyMuffled() && (activeSound == null || !Minecraft.getInstance().getSoundManager().isActive((SoundInstance) activeSound))) {
                 activeSound = SoundHandler.startTileSound(lastSoundEvent, getSoundCategory(), getInitialVolume(), level.getRandom(), getSoundPos());
             }
             // Always reset the cooldown; either we just attempted to play a sound or we're fully muffled; either way
