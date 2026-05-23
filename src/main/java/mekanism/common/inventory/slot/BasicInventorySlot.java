@@ -335,7 +335,7 @@ public class BasicInventorySlot implements IInventorySlot {
 
     //TODO - 26.1: review this
     public Void context() {
-        return itemAccess;
+        return context;
     }
 
     private class ResourceHandlerWrapper extends ItemStackResourceHandler {

@@ -185,7 +185,7 @@ public abstract class GuiMekanism<CONTAINER extends AbstractContainerMenu> exten
         pose.translate(leftPos, topPos);
         for (LRU<GuiWindow>.LRUIterator iter = getWindowsDescendingIterator(); iter.hasNext(); ) {
             GuiWindow overlay = iter.next();
-            overlay.onRenderForeground(graphics, mouseX, mouseY, 200, 200);
+            overlay.onRenderForeground(graphics, mouseX, mouseY);
             if (iter.hasNext()) {
                 overlay.renderBlur(graphics);
             }

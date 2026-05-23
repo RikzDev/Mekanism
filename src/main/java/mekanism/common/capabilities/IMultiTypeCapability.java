@@ -39,7 +39,7 @@ public interface IMultiTypeCapability<HANDLER, ITEM_HANDLER extends HANDLER> {
      * @apiNote Only use this helper if you don't actually need the capability, otherwise prefer using {@link #getCapability(ItemStack)} and null checking.
      */
     default boolean hasCapability(ItemStack stack) {
-        return getCapability(access) != null;
+        return getCapability(stack) != null;
     }
 
     @Nullable

@@ -136,8 +136,8 @@ public class MekanismJEI implements IModPlugin {
         for (Holder<Item> item : items) {
             //Handle items
             ItemStack stack = new ItemStack(item);
-            Void context = stack;
-            if (Capabilities.STRICT_ENERGY.hasCapability(itemAccess) || Capabilities.CHEMICAL.hasCapability(itemAccess) || Capabilities.FLUID.hasCapability(itemAccess)) {
+            //Use stack directly for capability access
+            if (stack.getCapability(Capabilities.STRICT_ENERGY.item()) != null || stack.getCapability(Capabilities.CHEMICAL.item()) != null || stack.getCapability(Capabilities.FLUID.item()) != null) {
                 registry.registerSubtypeInterpreter(stack.getItem(), MEKANISM_DATA_INTERPRETER);
             }
         }

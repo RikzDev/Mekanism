@@ -12,6 +12,7 @@ import mekanism.api.fluid.IExtendedFluidTank;
 import mekanism.api.fluid.IMekanismFluidHandler;
 import mekanism.api.radiation.IRadiationManager;
 import mekanism.api.tier.BaseTier;
+import net.minecraft.world.item.ItemStack;
 import mekanism.common.Mekanism;
 import mekanism.common.advancements.MekanismCriteriaTriggers;
 import mekanism.common.advancements.triggers.UseGaugeDropperTrigger.UseDropperAction;
@@ -58,15 +59,15 @@ public record PacketDropperUse(DropperAction action, TankType tankType, int tank
     public void handle(IPayloadContext context) {
         //todo - 26.1: validate that this successfully gets the tile
         if (tankId >= 0 && context.player() instanceof ServerPlayer player && player.containerMenu instanceof MekanismTileContainer<?> mekTileContainer) {
-            //ItemAccess removed in 26.1 - cursor interaction handled differently
-            ItemResource itemResource = itemAccess.getResource();
+            ItemStack cursorStack = player.containerMenu.getCarried();
+            ItemResource itemResource = ItemResource.fromStack(cursorStack);
             if (!itemResource.isEmpty() && itemResource.getItem() instanceof ItemGaugeDropper) {
                 TileEntityMekanism tile = mekTileContainer.getTileEntity();
                 if (tile != null) {
                     if (tile instanceof TileEntityMultiblock<?> multiblock) {
                         MultiblockData structure = multiblock.getMultiblock();
                         if (structure.isFormed()) {
-                            handleTankType(structure, player, itemAccess, player.level(), structure.getBounds().getCenter());
+                            handleTankType(structure, player, cursorStack, player.level(), structure.getBounds().getCenter());
                         }
                     } else {
                         if (action == DropperAction.DUMP_TANK && !player.isCreative()) {
@@ -77,28 +78,28 @@ public record PacketDropperUse(DropperAction action, TankType tankType, int tank
                                 return;
                             }
                         }
-                        handleTankType(tile, player, itemAccess, tile.getLevel(), tile.getBlockPos());
+                        handleTankType(tile, player, cursorStack, tile.getLevel(), tile.getBlockPos());
                     }
                 }
             }
         }
     }
 
-    private <HANDLER extends IMekanismFluidHandler & IMekanismChemicalHandler> void handleTankType(HANDLER handler, ServerPlayer player, Void context, Level level, BlockPos pos) {
+    private <HANDLER extends IMekanismFluidHandler & IMekanismChemicalHandler> void handleTankType(HANDLER handler, ServerPlayer player, ItemStack cursorStack, Level level, BlockPos pos) {
         if (tankType == TankType.FLUID_TANK) {
             IExtendedFluidTank fluidTank = handler.getFluidTank(tankId, null);
             if (fluidTank != null) {
-                handleFluidTank(player, itemAccess, fluidTank);
+                handleFluidTank(player, cursorStack, fluidTank);
             }
         } else if (tankType == TankType.CHEMICAL_TANK) {
             IChemicalTank chemicalTank = handler.getChemicalTank(tankId, null);
             if (chemicalTank != null) {
-                handleChemicalTank(player, itemAccess, chemicalTank, level, pos);
+                handleChemicalTank(player, cursorStack, chemicalTank, level, pos);
             }
         }
     }
 
-    private void handleChemicalTank(ServerPlayer player, Void context, IChemicalTank tank, Level level, BlockPos pos) {
+    private void handleChemicalTank(ServerPlayer player, ItemStack cursorStack, IChemicalTank tank, Level level, BlockPos pos) {
         if (action == DropperAction.DUMP_TANK) {
             //Dump the tank
             if (!tank.isEmpty()) {
@@ -108,7 +109,7 @@ public record PacketDropperUse(DropperAction action, TankType tankType, int tank
                 MekanismCriteriaTriggers.USE_GAUGE_DROPPER.value().trigger(player, UseDropperAction.DUMP);
             }
         } else {
-            IChemicalHandler handler = Capabilities.CHEMICAL.getCapability(itemAccess);
+            IChemicalHandler handler = cursorStack.getCapability(Capabilities.CHEMICAL.item());
             if (handler instanceof IMekanismChemicalHandler chemicalHandler) {
                 IChemicalTank itemTank = chemicalHandler.getChemicalTank(0, null);
                 //It is a chemical tank
@@ -128,14 +129,14 @@ public record PacketDropperUse(DropperAction action, TankType tankType, int tank
         }
     }
 
-    private void handleFluidTank(ServerPlayer player, Void context, IExtendedFluidTank fluidTank) {
+    private void handleFluidTank(ServerPlayer player, ItemStack cursorStack, IExtendedFluidTank fluidTank) {
         if (action == DropperAction.DUMP_TANK) {
             //Dump the tank
             fluidTank.setEmpty();
             MekanismCriteriaTriggers.USE_GAUGE_DROPPER.value().trigger(player, UseDropperAction.DUMP);
             return;
         }
-        IFluidHandlerItem fluidHandlerItem = Capabilities.FLUID.getCapability(itemAccess);
+        IFluidHandlerItem fluidHandlerItem = cursorStack.getCapability(Capabilities.FLUID.item());
         if (fluidHandlerItem instanceof IMekanismFluidHandler fluidHandler) {
             IExtendedFluidTank itemFluidTank = fluidHandler.getFluidTank(0, null);
             if (itemFluidTank != null) {

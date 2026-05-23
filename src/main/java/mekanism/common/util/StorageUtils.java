@@ -359,14 +359,14 @@ public class StorageUtils {
 
     private static double getDurabilityForDisplay(ItemStack stack) {
         double bestRatio = 0;
-        Void context = stack;
-        IChemicalHandler handler = Capabilities.CHEMICAL.getCapability(itemAccess);
+        //Use stack directly for capability access
+        IChemicalHandler handler = stack.getCapability(Capabilities.CHEMICAL.item());
         if (handler != null) {
             for (int chemTack = 0, chemTanks = handler.getChemicalTanks(); chemTack < chemTanks; chemTack++) {
                 bestRatio = Math.max(bestRatio, getRatio(handler.getChemicalInTank(chemTack).amount(), handler.getChemicalTankCapacity(chemTack)));
             }
         }
-        IFluidHandlerItem fluidHandlerItem = Capabilities.FLUID.getCapability(itemAccess);
+        IFluidHandlerItem fluidHandlerItem = stack.getCapability(Capabilities.FLUID.item());
         if (fluidHandlerItem != null) {
             for (int tank = 0, tanks = fluidHandlerItem.getTanks(); tank < tanks; tank++) {
                 bestRatio = Math.max(bestRatio, getRatio(fluidHandlerItem.getFluidInTank(tank).amount(), fluidHandlerItem.getTankCapacity(tank)));

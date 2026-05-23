@@ -49,7 +49,7 @@ public class Capabilities {
                                    EntityCapability<IFluidHandler, @Nullable Direction> entity) implements IMultiTypeCapability<IFluidHandler, IFluidHandlerItem> {
     }
 
-    public static final MultiTypeCapability<EnergyHandler> ENERGY = new MultiTypeCapability<>(Energy.BLOCK, Energy.ITEM, Energy.ENTITY);
+    public static final MultiTypeCapability<EnergyHandler> ENERGY = new MultiTypeCapability<>(Energy.BLOCK, ItemCapability.createVoid(Mekanism.rl("energy"), EnergyHandler.class), Energy.ENTITY);
     //TODO - 26.1: Replace these with using the actual types that Neo has
     public static final IMultiTypeCapability<IFluidHandler, IFluidHandlerItem> FLUID = new FluidCapability(
           BlockCapability.createSided(Mekanism.rl("legacy_fluid"), IFluidHandler.class),
