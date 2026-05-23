@@ -1,6 +1,7 @@
 package mekanism.common.capabilities;
 
 import java.util.function.BooleanSupplier;
+import net.minecraft.world.item.ItemStack;
 import mekanism.common.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -20,7 +21,7 @@ public interface IMultiTypeCapability<HANDLER, ITEM_HANDLER extends HANDLER> {
 
     BlockCapability<HANDLER, @Nullable Direction> block();
 
-    ItemCapability<ITEM_HANDLER, ItemAccess> item();
+    ItemCapability<ITEM_HANDLER, Void> item();
 
     EntityCapability<HANDLER, ?> entity();
 
@@ -29,15 +30,15 @@ public interface IMultiTypeCapability<HANDLER, ITEM_HANDLER extends HANDLER> {
     }
 
     @Nullable
-    default ITEM_HANDLER getCapability(ItemAccess access) {
+    default ITEM_HANDLER getCapability(ItemStack stack) {
         //Note: Safety handling of empty stack is done when looking up the provider inside getCapability's implementation
-        return access.getCapability(item());
+        return stack.getCapability(item());
     }
 
     /**
-     * @apiNote Only use this helper if you don't actually need the capability, otherwise prefer using {@link #getCapability(ItemAccess)} and null checking.
+     * @apiNote Only use this helper if you don't actually need the capability, otherwise prefer using {@link #getCapability(ItemStack)} and null checking.
      */
-    default boolean hasCapability(ItemAccess access) {
+    default boolean hasCapability(ItemStack stack) {
         return getCapability(access) != null;
     }
 

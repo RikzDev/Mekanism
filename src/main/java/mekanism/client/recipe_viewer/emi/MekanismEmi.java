@@ -210,7 +210,7 @@ public class MekanismEmi implements EmiPlugin {
         for (Holder<Item> item : items) {
             //Handle items
             ItemStack stack = new ItemStack(item);
-            ItemAccess itemAccess = stack;
+            Void context = stack;
             if (Capabilities.STRICT_ENERGY.hasCapability(itemAccess) || Capabilities.CHEMICAL.hasCapability(itemAccess) || Capabilities.FLUID.hasCapability(itemAccess)) {
                 registry.setDefaultComparison(stack.getItem(), MEKANISM_COMPARISON);
             }

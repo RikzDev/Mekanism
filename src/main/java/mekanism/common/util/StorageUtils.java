@@ -359,7 +359,7 @@ public class StorageUtils {
 
     private static double getDurabilityForDisplay(ItemStack stack) {
         double bestRatio = 0;
-        ItemAccess itemAccess = stack;
+        Void context = stack;
         IChemicalHandler handler = Capabilities.CHEMICAL.getCapability(itemAccess);
         if (handler != null) {
             for (int chemTack = 0, chemTanks = handler.getChemicalTanks(); chemTack < chemTanks; chemTack++) {

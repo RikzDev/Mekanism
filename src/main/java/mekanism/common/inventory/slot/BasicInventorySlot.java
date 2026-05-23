@@ -20,7 +20,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.neoforge.transfer.access.ItemAccess;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ItemStackResourceHandler;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 @NothingNullByDefault
 public class BasicInventorySlot implements IInventorySlot {
 
-    private final ItemAccess itemAccess = ItemAccess.forHandlerIndex(new ResourceHandlerWrapper(), 0);
+    private final Void context = null; //ItemAccess removed in 26.1
 
     public static BasicInventorySlot at(@Nullable IContentsListener listener, int x, int y) {
         return at(ConstantPredicates.alwaysTrue(), listener, x, y);
@@ -335,7 +334,7 @@ public class BasicInventorySlot implements IInventorySlot {
     }
 
     //TODO - 26.1: review this
-    public ItemAccess itemAccess() {
+    public Void context() {
         return itemAccess;
     }
 

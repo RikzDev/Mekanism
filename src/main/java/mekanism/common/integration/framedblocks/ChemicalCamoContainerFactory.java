@@ -53,8 +53,8 @@ final class ChemicalCamoContainerFactory extends CamoContainerFactory<ChemicalCa
 
     @Override
     @Nullable
-    public ChemicalCamoContainer applyCamo(Level level, BlockPos pos, Player player, ItemAccess itemAccess) {
-        IChemicalHandler handler = itemAccess.getCapability(Capabilities.CHEMICAL.item());
+    public ChemicalCamoContainer applyCamo(Level level, BlockPos pos, Player player, Void context) {
+        IChemicalHandler handler = stack.getCapability(Capabilities.CHEMICAL.item());
         if (handler == null || handler.getChemicalTanks() <= 0) {
             return null;
         }
@@ -83,12 +83,12 @@ final class ChemicalCamoContainerFactory extends CamoContainerFactory<ChemicalCa
     }
 
     @Override
-    public boolean removeCamo(Level level, BlockPos pos, Player player, ItemAccess itemAccess, ChemicalCamoContainer camo) {
+    public boolean removeCamo(Level level, BlockPos pos, Player player, Void context, ChemicalCamoContainer camo) {
         if (itemAccess.getResource().isEmpty()) {
             return false;
         }
 
-        IChemicalHandler handler = itemAccess.getCapability(Capabilities.CHEMICAL.item());
+        IChemicalHandler handler = stack.getCapability(Capabilities.CHEMICAL.item());
         if (handler == null || handler.getChemicalTanks() <= 0) {
             return false;
         }

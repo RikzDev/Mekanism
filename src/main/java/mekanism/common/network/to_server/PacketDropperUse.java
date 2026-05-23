@@ -35,7 +35,6 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-import net.neoforged.neoforge.transfer.access.ItemAccess;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import org.jetbrains.annotations.NotNull;
 
@@ -59,7 +58,7 @@ public record PacketDropperUse(DropperAction action, TankType tankType, int tank
     public void handle(IPayloadContext context) {
         //todo - 26.1: validate that this successfully gets the tile
         if (tankId >= 0 && context.player() instanceof ServerPlayer player && player.containerMenu instanceof MekanismTileContainer<?> mekTileContainer) {
-            ItemAccess itemAccess = ItemAccess.forPlayerCursor(player, mekTileContainer);
+            //ItemAccess removed in 26.1 - cursor interaction handled differently
             ItemResource itemResource = itemAccess.getResource();
             if (!itemResource.isEmpty() && itemResource.getItem() instanceof ItemGaugeDropper) {
                 TileEntityMekanism tile = mekTileContainer.getTileEntity();
@@ -85,7 +84,7 @@ public record PacketDropperUse(DropperAction action, TankType tankType, int tank
         }
     }
 
-    private <HANDLER extends IMekanismFluidHandler & IMekanismChemicalHandler> void handleTankType(HANDLER handler, ServerPlayer player, ItemAccess itemAccess, Level level, BlockPos pos) {
+    private <HANDLER extends IMekanismFluidHandler & IMekanismChemicalHandler> void handleTankType(HANDLER handler, ServerPlayer player, Void context, Level level, BlockPos pos) {
         if (tankType == TankType.FLUID_TANK) {
             IExtendedFluidTank fluidTank = handler.getFluidTank(tankId, null);
             if (fluidTank != null) {
@@ -99,7 +98,7 @@ public record PacketDropperUse(DropperAction action, TankType tankType, int tank
         }
     }
 
-    private void handleChemicalTank(ServerPlayer player, ItemAccess itemAccess, IChemicalTank tank, Level level, BlockPos pos) {
+    private void handleChemicalTank(ServerPlayer player, Void context, IChemicalTank tank, Level level, BlockPos pos) {
         if (action == DropperAction.DUMP_TANK) {
             //Dump the tank
             if (!tank.isEmpty()) {
@@ -129,7 +128,7 @@ public record PacketDropperUse(DropperAction action, TankType tankType, int tank
         }
     }
 
-    private void handleFluidTank(ServerPlayer player, ItemAccess itemAccess, IExtendedFluidTank fluidTank) {
+    private void handleFluidTank(ServerPlayer player, Void context, IExtendedFluidTank fluidTank) {
         if (action == DropperAction.DUMP_TANK) {
             //Dump the tank
             fluidTank.setEmpty();

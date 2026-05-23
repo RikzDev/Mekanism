@@ -45,15 +45,15 @@ public class Capabilities {
     public static final ICapabilityProvider<?, ?, ?> SIMPLE_PROVIDER = (obj, context) -> obj;
 
     private record FluidCapability(BlockCapability<IFluidHandler, @Nullable Direction> block,
-                                   ItemCapability<IFluidHandlerItem, ItemAccess> item,
+                                   ItemCapability<IFluidHandlerItem, Void> item,
                                    EntityCapability<IFluidHandler, @Nullable Direction> entity) implements IMultiTypeCapability<IFluidHandler, IFluidHandlerItem> {
     }
 
-    public static final MultiTypeCapability<EnergyHandler> ENERGY = new MultiTypeCapability<>(Energy.BLOCK, ItemCapability.createVoid(Mekanism.rl("energy"), IStrictEnergyHandler.class), Energy.ENTITY);
+    public static final MultiTypeCapability<EnergyHandler> ENERGY = new MultiTypeCapability<>(Energy.BLOCK, Energy.ITEM, Energy.ENTITY);
     //TODO - 26.1: Replace these with using the actual types that Neo has
     public static final IMultiTypeCapability<IFluidHandler, IFluidHandlerItem> FLUID = new FluidCapability(
           BlockCapability.createSided(Mekanism.rl("legacy_fluid"), IFluidHandler.class),
-          ItemCapability.create(Mekanism.rl("legacy_fluid"), IFluidHandlerItem.class, ItemAccess.class),
+          ItemCapability.createVoid(Mekanism.rl("legacy_fluid"), IFluidHandlerItem.class),
           EntityCapability.createSided(Mekanism.rl("legacy_fluid"), IFluidHandler.class));//new FluidCapability(Fluid.BLOCK, Fluid.ITEM, Fluid.ENTITY);
     //Note: We intentionally don't use the entity automation capability, as we want to be able to target player inventories and the like
     public static final MultiTypeCapability<IItemHandler> ITEM = new MultiTypeCapability<>(Mekanism.rl("legacy_item"), IItemHandler.class);//new MultiTypeCapability<>(Item.BLOCK, Item.ITEM, Item.ENTITY);

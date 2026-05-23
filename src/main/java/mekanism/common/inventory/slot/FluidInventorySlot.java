@@ -154,7 +154,7 @@ public class FluidInventorySlot extends BasicInventorySlot implements IFluidHand
             return null;
         }
         ItemStack stackToCheck = stack.count() > 1 ? stack.copyWithCount(1) : stack;
-        return Capabilities.FLUID.getCapability(ItemAccess.forStack(stackToCheck));
+        return Capabilities.FLUID.getCapability(stackToCheck);
     }
 
     //TODO: Should we make this also have the fluid type have to match a desired type???

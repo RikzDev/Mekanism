@@ -209,7 +209,7 @@ public class ChemicalInventorySlot extends BasicInventorySlot {
 
     @Nullable
     protected IChemicalHandler getCapability() {
-        return null; //todo - 26.1 ItemAccess
+        return null; //TODO - 26.1: ItemAccess removed
         //return Capabilities.CHEMICAL.getCapability(current);
     }
 
