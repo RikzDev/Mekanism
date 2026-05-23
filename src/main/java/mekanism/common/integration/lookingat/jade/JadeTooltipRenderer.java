@@ -58,7 +58,7 @@ public class JadeTooltipRenderer<ACCESSOR extends Accessor<?>> implements ICompo
               default -> DataResult.error(() -> "Unknown Element Type, expected either energy or text");
           }
     );
-    static final Codec<ILookingAtElement> ELEMENT_CODEC = NeoForgeExtraCodecs.withAlternative(FLUID_OR_CHEMICAL_CODEC, ENERGY_OR_TEXT_CODEC).codec();
+    static final Codec<ILookingAtElement> ELEMENT_CODEC = JadeLookingAtHelper.ELEMENT_CODEC;
 
     @Override
     public Identifier getUid() {
