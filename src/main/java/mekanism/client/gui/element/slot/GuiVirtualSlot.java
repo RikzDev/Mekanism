@@ -11,6 +11,7 @@ import mekanism.common.inventory.container.slot.VirtualInventoryContainerSlot;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -48,6 +49,10 @@ public class GuiVirtualSlot extends GuiSlot implements IRecipeViewerIngredientHe
     @Override
     protected void drawContents(@NotNull GuiGraphicsExtractor guiGraphics) {
         if (virtualSlot != null) {
+            //isActive()=false means vanilla's renderSlot won't call updateRenderInfo.
+            //Update it here directly from the slot's actual item.
+            Slot slot = virtualSlot.getSlot();
+            virtualSlot.updateRenderInfo(slot.getItem(), false, null);
             ItemStack stack = virtualSlot.getStackToRender();
             if (!stack.isEmpty()) {
                 int xPos = relativeX + 1;

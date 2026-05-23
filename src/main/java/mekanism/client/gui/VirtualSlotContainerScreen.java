@@ -40,13 +40,10 @@ public abstract class VirtualSlotContainerScreen<T extends AbstractContainerMenu
     @Deprecated//Don't use directly, this is normally private in ContainerScreen
     protected final boolean isHovering(@NotNull Slot slot, double mouseX, double mouseY) {
         boolean mouseOver = isMouseOverSlot(slot, mouseX, mouseY);
-        if (mouseOver && slot instanceof IVirtualSlot) {
-            //Fake that the slot is "not" selected so that when this is called by render
-            // we don't render hover mask as it will be in the incorrect position
-            if (hoveredSlot == null && slot.isActive()) {
-                //If needed though we do make sure to update the hovered slot for use elsewhere
-                hoveredSlot = slot;
-            }
+        if (slot instanceof IVirtualSlot) {
+            //Never set hoveredSlot for virtual slots. In 26.1, isHovering(Slot,d,d) is
+            //PRIVATE and can't be overridden. extractSlotHighlight uses hoveredSlot.x/y
+            //(final at 0,0 for virtual slots), causing phantom highlights.
             return false;
         }
         return mouseOver;

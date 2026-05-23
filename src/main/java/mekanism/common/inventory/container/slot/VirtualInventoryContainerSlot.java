@@ -79,6 +79,14 @@ public class VirtualInventoryContainerSlot extends InventoryContainerSlot implem
     }
 
     @Override
+    public boolean isActive() {
+        //Always false: vanilla's isHovering(Slot,double,double) is PRIVATE in 26.1
+        //and cannot be overridden. With isActive()=true, vanilla renders phantom hover
+        //at slot.x/slot.y (0,0). GuiVirtualSlot handles all rendering and interaction.
+        return false;
+    }
+
+    @Override
     public boolean exists(@Nullable SelectedWindowData windowData) {
         return this.windowData.equals(windowData);
     }
