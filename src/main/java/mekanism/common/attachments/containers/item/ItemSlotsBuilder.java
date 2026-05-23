@@ -43,7 +43,6 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
-import net.neoforged.neoforge.transfer.access.ItemAccess;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemSlotsBuilder {
@@ -251,7 +250,7 @@ public class ItemSlotsBuilder {
 
     private boolean canFluidFill(ItemStack attachedTo, int tankIndex, ItemStack stack) {
         //Copy of FluidInventorySlot#getFillPredicate
-        IFluidHandlerItem fluidHandlerItem = Capabilities.FLUID.getCapability(ItemAccess.forStack(stack));
+        IFluidHandlerItem fluidHandlerItem = Capabilities.FLUID.getCapability(stack);
         if (fluidHandlerItem != null) {
             IExtendedFluidTank fluidTank = ContainerType.FLUID.createContainer(attachedTo, tankIndex);
             for (int tank = 0, tanks = fluidHandlerItem.getTanks(); tank < tanks; tank++) {
@@ -327,7 +326,7 @@ public class ItemSlotsBuilder {
     public ItemSlotsBuilder addFluidRotarySlot(int tankIndex) {
         return addSlot(((type, attachedTo, containerIndex) -> new ComponentBackedInventorySlot(attachedTo, containerIndex, ConstantPredicates.manualOnly(), (stack, automationType) -> {
             //Copy of FluidInventorySlot's rotary insert predicate
-            IFluidHandlerItem fluidHandlerItem = Capabilities.FLUID.getCapability(ItemAccess.forStack(stack));
+            IFluidHandlerItem fluidHandlerItem = Capabilities.FLUID.getCapability(stack);
             if (fluidHandlerItem != null) {
                 boolean mode = attachedTo.getOrDefault(MekanismDataComponents.ROTARY_MODE, false);
                 //Mode == true if fluid to chemical
@@ -357,7 +356,7 @@ public class ItemSlotsBuilder {
     public ItemSlotsBuilder addFluidFuelSlot(int tankIndex, Predicate<@NotNull ItemStack> hasFuelValue) {
         //Copy of FluidFuelInventorySlot's forFuel insert and extract predicates
         return addSlot(((type, attachedTo, containerIndex) -> new ComponentBackedInventorySlot(attachedTo, containerIndex, (stack, automationType) -> {
-            IFluidHandlerItem fluidHandlerItem = Capabilities.FLUID.getCapability(ItemAccess.forStack(stack));
+            IFluidHandlerItem fluidHandlerItem = Capabilities.FLUID.getCapability(stack);
             if (fluidHandlerItem != null) {
                 int tanks = fluidHandlerItem.getTanks();
                 if (tanks > 0) {
@@ -379,7 +378,7 @@ public class ItemSlotsBuilder {
 
     private boolean canChemicalDrainInsert(ItemStack attachedTo, int tankIndex, ItemStack stack) {
         //Copy of logic from ChemicalInventorySlot#getDrainInsertPredicate
-        IChemicalHandler handler = Capabilities.CHEMICAL.getCapability(ItemAccess.forStack(stack));
+        IChemicalHandler handler = Capabilities.CHEMICAL.getCapability(stack);
         if (handler != null) {
             //Note: We don't need to create a fake tank using the container type, as we only care about the stored type
             AttachedChemicals containers = ContainerType.CHEMICAL.getOrEmpty(attachedTo);
@@ -402,7 +401,7 @@ public class ItemSlotsBuilder {
 
     private boolean canChemicalFillExtract(ItemStack attachedTo, int tankIndex, ItemStack stack) {
         //Copy of logic from ChemicalInventorySlot#getFillExtractPredicate
-        IChemicalHandler handler = Capabilities.CHEMICAL.getCapability(ItemAccess.forStack(stack));
+        IChemicalHandler handler = Capabilities.CHEMICAL.getCapability(stack);
         if (handler != null) {
             IChemicalTank chemicalTank = null;
             for (int tank = 0; tank < handler.getChemicalTanks(); tank++) {
@@ -425,7 +424,7 @@ public class ItemSlotsBuilder {
 
     private boolean canChemicalFillInsert(ItemStack attachedTo, int tankIndex, ItemStack stack) {
         //Copy of logic from ChemicalInventorySlot#fillInsertCheck
-        IChemicalHandler handler = Capabilities.CHEMICAL.getCapability(ItemAccess.forStack(stack));
+        IChemicalHandler handler = Capabilities.CHEMICAL.getCapability(stack);
         if (handler != null) {
             IChemicalTank chemicalTank = null;
             for (int tank = 0; tank < handler.getChemicalTanks(); tank++) {
@@ -447,7 +446,7 @@ public class ItemSlotsBuilder {
 
     private boolean canChemicalFillOrConvertExtract(ItemStack attachedTo, int tankIndex, ItemStack stack) {
         //Copy of logic from ChemicalInventorySlot#getFillOrConvertExtractPredicate
-        IChemicalHandler handler = Capabilities.CHEMICAL.getCapability(ItemAccess.forStack(stack));
+        IChemicalHandler handler = Capabilities.CHEMICAL.getCapability(stack);
         IChemicalTank chemicalTank = null;
         if (handler != null) {
             int tanks = handler.getChemicalTanks();
@@ -478,7 +477,7 @@ public class ItemSlotsBuilder {
         //Copy of logic from ChemicalInventorySlot#getFillOrConvertInsertPredicate
         IChemicalTank chemicalTank = null;
         {//Fill insert check logic, we want to avoid resolving the tank as long as possible
-            IChemicalHandler handler = Capabilities.CHEMICAL.getCapability(ItemAccess.forStack(stack));
+            IChemicalHandler handler = Capabilities.CHEMICAL.getCapability(stack);
             if (handler != null) {
                 for (int tank = 0; tank < handler.getChemicalTanks(); tank++) {
                     ChemicalStack chemicalInTank = handler.getChemicalInTank(tank);

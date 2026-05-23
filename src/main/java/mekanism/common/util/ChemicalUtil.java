@@ -25,7 +25,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
-import net.neoforged.neoforge.transfer.access.ItemAccess;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -95,7 +94,7 @@ public class ChemicalUtil {
     }
 
     public static boolean hasChemical(ItemStack stack, Predicate<ChemicalStack> validityCheck) {
-        IChemicalHandler handler = Capabilities.CHEMICAL.getCapability(ItemAccess.forStack(stack));
+        IChemicalHandler handler = Capabilities.CHEMICAL.getCapability(stack);
         if (handler != null) {
             for (int tank = 0; tank < handler.getChemicalTanks(); tank++) {
                 ChemicalStack chemicalStack = handler.getChemicalInTank(tank);

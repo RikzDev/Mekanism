@@ -77,7 +77,6 @@ import net.minecraft.world.item.equipment.ArmorType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.transfer.access.ItemAccess;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -379,7 +378,7 @@ public class ItemMekaSuitArmor extends ItemSpecialArmor implements IModuleContai
     public void useJetpackFuel(ItemStack stack) {
         IModule<ModuleJetpackUnit> module = getEnabledModule(stack, MekanismModules.JETPACK_UNIT);
         if (module != null) {
-            IChemicalHandler gasHandlerItem = Capabilities.CHEMICAL.getCapability(ItemAccess.forStack(stack));
+            IChemicalHandler gasHandlerItem = Capabilities.CHEMICAL.getCapability(stack);
             if (gasHandlerItem != null) {
                 int amount = Mth.ceil(module.getCustomInstance().getThrustMultiplier());
                 gasHandlerItem.extractChemical(MekanismChemicals.HYDROGEN.asStack(amount), Action.EXECUTE);

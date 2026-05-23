@@ -124,7 +124,6 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.damagesource.DamageContainer;
-import net.neoforged.neoforge.transfer.access.ItemAccess;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -437,7 +436,7 @@ public class EntityRobit extends PathfinderMob implements IRobit, IMekanismInven
 
     private ItemStack getItemVariant() {
         ItemStack stack = MekanismItems.ROBIT.asStack();
-        IStrictEnergyHandler energyHandlerItem = Capabilities.STRICT_ENERGY.getCapability(ItemAccess.forStack(stack));
+        IStrictEnergyHandler energyHandlerItem = Capabilities.STRICT_ENERGY.getCapability(stack);
         if (energyHandlerItem != null && energyHandlerItem.getEnergyContainerCount() > 0) {
             energyHandlerItem.setEnergy(0, energyContainer.getEnergy());
         }

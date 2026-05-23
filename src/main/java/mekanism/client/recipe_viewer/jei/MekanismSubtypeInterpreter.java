@@ -12,7 +12,6 @@ import mezz.jei.api.ingredients.subtypes.UidContext;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.transfer.access.ItemAccess;
 import org.jetbrains.annotations.Nullable;
 
 public class MekanismSubtypeInterpreter implements ISubtypeInterpreter<ItemStack> {
@@ -77,7 +76,7 @@ public class MekanismSubtypeInterpreter implements ISubtypeInterpreter<ItemStack
     private static IChemicalHandler getChemicalHandler(ItemStack stack) {
         IChemicalHandler handler = ContainerType.CHEMICAL.createHandlerIfData(stack);
         if (handler == null) {
-            return Capabilities.CHEMICAL.getCapability(ItemAccess.forStack(stack));
+            return Capabilities.CHEMICAL.getCapability(stack);
         }
         return handler;
     }
@@ -86,7 +85,7 @@ public class MekanismSubtypeInterpreter implements ISubtypeInterpreter<ItemStack
     private static IFluidHandler getFluidHandler(ItemStack stack) {
         IFluidHandler handler = ContainerType.FLUID.createHandlerIfData(stack);
         if (handler == null) {
-            return Capabilities.FLUID.getCapability(ItemAccess.forStack(stack));
+            return Capabilities.FLUID.getCapability(stack);
         }
         return handler;
     }
@@ -95,7 +94,7 @@ public class MekanismSubtypeInterpreter implements ISubtypeInterpreter<ItemStack
     private static IStrictEnergyHandler getEnergyHandler(ItemStack stack) {
         IStrictEnergyHandler handler = ContainerType.ENERGY.createHandlerIfData(stack);
         if (handler == null) {
-            return Capabilities.STRICT_ENERGY.getCapability(ItemAccess.forStack(stack));
+            return Capabilities.STRICT_ENERGY.getCapability(stack);
         }
         return handler;
     }

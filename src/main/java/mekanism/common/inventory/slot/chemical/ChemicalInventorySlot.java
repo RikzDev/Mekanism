@@ -21,7 +21,6 @@ import mekanism.common.recipe.MekanismRecipeType;
 import mekanism.common.util.MekanismUtils;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.transfer.access.ItemAccess;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,7 +37,7 @@ public class ChemicalInventorySlot extends BasicInventorySlot {
 
     private static Predicate<@NotNull ItemStack> getFillOrConvertExtractPredicate(IChemicalTank chemicalTank, Supplier<Level> levelSupplier) {
         return stack -> {
-            IChemicalHandler handler = Capabilities.CHEMICAL.getCapability(ItemAccess.forStack(stack));
+            IChemicalHandler handler = Capabilities.CHEMICAL.getCapability(stack);
             if (handler != null) {
                 for (int tank = 0; tank < handler.getChemicalTanks(); tank++) {
                     if (chemicalTank.isValid(handler.getChemicalInTank(tank))) {
@@ -77,7 +76,7 @@ public class ChemicalInventorySlot extends BasicInventorySlot {
 
     public static Predicate<@NotNull ItemStack> getFillExtractPredicate(IChemicalTank chemicalTank) {
         return stack -> {
-            IChemicalHandler handler = Capabilities.CHEMICAL.getCapability(ItemAccess.forStack(stack));
+            IChemicalHandler handler = Capabilities.CHEMICAL.getCapability(stack);
             if (handler != null) {
                 for (int tank = 0; tank < handler.getChemicalTanks(); tank++) {
                     ChemicalStack storedChemical = handler.getChemicalInTank(tank);
@@ -94,7 +93,7 @@ public class ChemicalInventorySlot extends BasicInventorySlot {
     }
 
     public static boolean fillInsertCheck(IChemicalTank chemicalTank, ItemStack stack) {
-        IChemicalHandler handler = Capabilities.CHEMICAL.getCapability(ItemAccess.forStack(stack));
+        IChemicalHandler handler = Capabilities.CHEMICAL.getCapability(stack);
         if (handler != null) {
             for (int tank = 0; tank < handler.getChemicalTanks(); tank++) {
                 ChemicalStack chemicalInTank = handler.getChemicalInTank(tank);
@@ -110,7 +109,7 @@ public class ChemicalInventorySlot extends BasicInventorySlot {
 
     public static Predicate<@NotNull ItemStack> getDrainInsertPredicate(IChemicalTank chemicalTank) {
         return stack -> {
-            IChemicalHandler handler = Capabilities.CHEMICAL.getCapability(ItemAccess.forStack(stack));
+            IChemicalHandler handler = Capabilities.CHEMICAL.getCapability(stack);
             if (handler != null) {
                 if (chemicalTank.isEmpty()) {
                     //If the chemical tank is empty, accept the chemical item as long as it is not full

@@ -15,7 +15,6 @@ import mekanism.common.inventory.slot.chemical.ChemicalInventorySlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.neoforge.transfer.access.ItemAccess;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,7 +59,7 @@ public class HybridInventorySlot extends BasicInventorySlot implements IFluidHan
             case CHEMICAL -> chemicalInsertPredicate.test(stack);
             case EMPTY -> {
                 //Tank is empty, if the item is a fluid handler, and it is an internal check allow it
-                if (automationType == AutomationType.INTERNAL && Capabilities.FLUID.hasCapability(ItemAccess.forStack(stack))) {
+                if (automationType == AutomationType.INTERNAL && Capabilities.FLUID.hasCapability(stack)) {
                     yield true;
                 }
                 //otherwise, only allow it if one of the chemical insert predicates matches

@@ -17,7 +17,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.UseRemainder;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
-import net.neoforged.neoforge.transfer.access.ItemAccess;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,7 +33,7 @@ public class FluidFuelInventorySlot extends FluidInventorySlot {
         Objects.requireNonNull(fuelValue, "Fuel value calculator cannot be null");
         Predicate<ItemStack> fillPredicate = getFillPredicate(fluidTank);
         return new FluidFuelInventorySlot(fluidTank, fuelValue, fuelCreator, stack -> {
-            IFluidHandlerItem fluidHandlerItem = Capabilities.FLUID.getCapability(ItemAccess.forStack(stack));
+            IFluidHandlerItem fluidHandlerItem = Capabilities.FLUID.getCapability(stack);
             if (fluidHandlerItem != null) {
                 for (int tank = 0, tanks = fluidHandlerItem.getTanks(); tank < tanks; tank++) {
                     if (fluidTank.isFluidValid(fluidHandlerItem.getFluidInTank(tank))) {

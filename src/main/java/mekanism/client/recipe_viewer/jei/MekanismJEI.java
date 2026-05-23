@@ -79,7 +79,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.transfer.access.ItemAccess;
 import org.jetbrains.annotations.NotNull;
 
 @JeiPlugin
@@ -137,7 +136,7 @@ public class MekanismJEI implements IModPlugin {
         for (Holder<Item> item : items) {
             //Handle items
             ItemStack stack = new ItemStack(item);
-            ItemAccess itemAccess = ItemAccess.forStack(stack);
+            ItemAccess itemAccess = stack;
             if (Capabilities.STRICT_ENERGY.hasCapability(itemAccess) || Capabilities.CHEMICAL.hasCapability(itemAccess) || Capabilities.FLUID.hasCapability(itemAccess)) {
                 registry.registerSubtypeInterpreter(stack.getItem(), MEKANISM_DATA_INTERPRETER);
             }

@@ -19,7 +19,6 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
-import net.neoforged.neoforge.transfer.access.ItemAccess;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -76,7 +75,7 @@ public class FluidInventorySlot extends BasicInventorySlot implements IFluidHand
         Objects.requireNonNull(fluidTank, "Fluid tank cannot be null");
         Objects.requireNonNull(modeSupplier, "Mode supplier cannot be null");
         return new FluidInventorySlot(fluidTank, ConstantPredicates.alwaysFalse(), stack -> {
-            IFluidHandlerItem fluidHandlerItem = Capabilities.FLUID.getCapability(ItemAccess.forStack(stack));
+            IFluidHandlerItem fluidHandlerItem = Capabilities.FLUID.getCapability(stack);
             if (fluidHandlerItem != null) {
                 boolean mode = modeSupplier.getAsBoolean();
                 //Mode == true if fluid to gas
@@ -108,7 +107,7 @@ public class FluidInventorySlot extends BasicInventorySlot implements IFluidHand
 
     public static Predicate<ItemStack> getFillPredicate(IExtendedFluidTank fluidTank) {
         return stack -> {
-            IFluidHandlerItem fluidHandlerItem = Capabilities.FLUID.getCapability(ItemAccess.forStack(stack));
+            IFluidHandlerItem fluidHandlerItem = Capabilities.FLUID.getCapability(stack);
             if (fluidHandlerItem != null) {
                 for (int tank = 0, tanks = fluidHandlerItem.getTanks(); tank < tanks; tank++) {
                     FluidStack fluidInTank = fluidHandlerItem.getFluidInTank(tank);
@@ -151,7 +150,7 @@ public class FluidInventorySlot extends BasicInventorySlot implements IFluidHand
         // The fluid handler for buckets returns false about being able to accept fluids if they are stacked
         // though we have special handling to only move one item at a time anyway
         // Though we first have to check if it has a capability exposed at all while stacked
-        if (stack.count() > 1 && Capabilities.FLUID.getCapability(ItemAccess.forStack(stack)) == null) {
+        if (stack.count() > 1 && Capabilities.FLUID.getCapability(stack) == null) {
             return null;
         }
         ItemStack stackToCheck = stack.count() > 1 ? stack.copyWithCount(1) : stack;

@@ -25,7 +25,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.neoforge.transfer.access.ItemAccess;
 import org.jetbrains.annotations.Nullable;
 
 final class ChemicalCamoContainerFactory extends CamoContainerFactory<ChemicalCamoContainer> {
@@ -162,7 +161,7 @@ final class ChemicalCamoContainerFactory extends CamoContainerFactory<ChemicalCa
 
     @Override
     public void registerTriggerItems(TriggerRegistrar registrar) {
-        Predicate<ItemStack> predicate = stack -> ItemAccess.forStack(stack).getCapability(Capabilities.CHEMICAL.item()) != null;
+        Predicate<ItemStack> predicate = stack -> stack.getCapability(Capabilities.CHEMICAL.item()) != null;
         registrar.registerApplicationPredicate(predicate);
         registrar.registerRemovalPredicate(predicate);
     }

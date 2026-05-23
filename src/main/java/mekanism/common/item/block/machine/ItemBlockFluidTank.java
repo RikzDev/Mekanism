@@ -66,7 +66,6 @@ import net.neoforged.neoforge.common.SoundActions;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
-import net.neoforged.neoforge.transfer.access.ItemAccess;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -255,7 +254,7 @@ public class ItemBlockFluidTank extends ItemBlockTooltip<BlockTile<?, ?>> implem
     }
 
     private static IExtendedFluidTank getExtendedFluidTank(@NotNull ItemStack stack) {
-        IFluidHandlerItem fluidHandlerItem = Capabilities.FLUID.getCapability(ItemAccess.forStack(stack));
+        IFluidHandlerItem fluidHandlerItem = Capabilities.FLUID.getCapability(stack);
         if (fluidHandlerItem instanceof IMekanismFluidHandler fluidHandler) {
             return fluidHandler.getFluidTank(0, null);
         }
