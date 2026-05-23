@@ -1,6 +1,7 @@
 package mekanism.client.gui;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import org.joml.Matrix3x2fStack;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -159,6 +160,15 @@ public abstract class GuiMekanism<CONTAINER extends AbstractContainerMenu> exten
         return element;
     }
 
+    private boolean suppressCarriedItem = false;
+
+    @Override
+    public void extractCarriedItem(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        if (!suppressCarriedItem) {
+            super.extractCarriedItem(graphics, mouseX, mouseY);
+        }
+    }
+
     @Override
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         renderables.forEach(action -> {
@@ -166,7 +176,23 @@ public abstract class GuiMekanism<CONTAINER extends AbstractContainerMenu> exten
                 guiElement.updateBeforeExtract();
             }
         });
+        suppressCarriedItem = true;
         super.extractRenderState(graphics, mouseX, mouseY, a);
+        suppressCarriedItem = false;
+        //Render windows AFTER slots (above inventory items)
+        Matrix3x2fStack pose = graphics.pose();
+        pose.pushMatrix();
+        pose.translate(leftPos, topPos);
+        for (LRU<GuiWindow>.LRUIterator iter = getWindowsDescendingIterator(); iter.hasNext(); ) {
+            GuiWindow overlay = iter.next();
+            overlay.onRenderForeground(graphics, mouseX, mouseY, 200, 200);
+            if (iter.hasNext()) {
+                overlay.renderBlur(graphics);
+            }
+        }
+        pose.popMatrix();
+        //Render carried item ABOVE windows
+        super.extractCarriedItem(graphics, mouseX, mouseY);
     }
 
     protected <T extends GuiElement> T addRenderableWidget(T element) {
