@@ -49,7 +49,6 @@ public class GuiVirtualSlot extends GuiSlot implements IRecipeViewerIngredientHe
     @Override
     protected void drawContents(@NotNull GuiGraphicsExtractor guiGraphics) {
         if (virtualSlot != null) {
-            //Ensure render info is up to date from the actual slot item
             Slot slot = virtualSlot.getSlot();
             virtualSlot.updateRenderInfo(slot.getItem(), false, null);
             ItemStack stack = virtualSlot.getStackToRender();

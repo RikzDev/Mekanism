@@ -5,6 +5,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.Slot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,7 +43,6 @@ public abstract class VirtualSlotContainerScreen<T extends AbstractContainerMenu
         boolean mouseOver = isMouseOverSlot(slot, mouseX, mouseY);
         if (slot instanceof IVirtualSlot) {
             //Don't let vanilla render hover highlight for virtual slots (it would render at 0,0).
-            //getHoveredSlot handles setting hoveredSlot using correct positions.
             return false;
         }
         return mouseOver;
@@ -118,54 +118,14 @@ public abstract class VirtualSlotContainerScreen<T extends AbstractContainerMenu
     }*/
 
     public boolean slotClicked(@NotNull Slot slot, int button, boolean hasShiftDown) {
-        //Copy of super.mouseClicked, minus the call to all the sub elements as we know how we are interacting with it
-        /*InputConstants.Key mouseKey = InputConstants.Type.MOUSE.getOrCreate(button);
-        boolean pickBlockButton = minecraft.options.keyPickItem.isActiveAndMatches(mouseKey);
-        long time = Util.getMillis();
-        this.doubleclick = this.lastClickSlot == slot && time - this.lastClickTime < 250L && this.lastClickButton == button;
-        this.skipNextRelease = false;
-        if (button != InputConstants.MOUSE_BUTTON_LEFT && button != InputConstants.MOUSE_BUTTON_RIGHT && !pickBlockButton) {
-            checkHotbarMouseClicked(button);
-        } else if (slot.index != -1) {
-            if (minecraft.options.touchscreen().get()) {
-                if (slot.hasItem()) {
-                    this.clickedSlot = slot;
-                    this.draggingItem = ItemStack.EMPTY;
-                    this.isSplittingStack = button == InputConstants.MOUSE_BUTTON_RIGHT;
-                } else {
-                    this.clickedSlot = null;
-                }
-            } else if (!this.isQuickCrafting) {
-                if (menu.getCarried().isEmpty()) {
-                    if (pickBlockButton) {
-                        this.slotClicked(slot, slot.index, button, ContainerInput.CLONE);
-                    } else {
-                        ContainerInput clicktype = ContainerInput.PICKUP;
-                        if (hasShiftDown) {
-                            this.lastQuickMoved = slot.hasItem() ? slot.getItem().copy() : ItemStack.EMPTY;
-                            clicktype = ContainerInput.QUICK_MOVE;
-                        }
-                        this.slotClicked(slot, slot.index, button, clicktype);
-                    }
-                    this.skipNextRelease = true;
-                } else {
-                    this.isQuickCrafting = true;
-                    this.quickCraftingButton = button;
-                    this.quickCraftSlots.clear();
-                    if (button == InputConstants.MOUSE_BUTTON_LEFT) {
-                        this.quickCraftingType = AbstractContainerMenu.QUICKCRAFT_TYPE_CHARITABLE;
-                    } else if (button == InputConstants.MOUSE_BUTTON_RIGHT) {
-                        this.quickCraftingType = AbstractContainerMenu.QUICKCRAFT_TYPE_GREEDY;
-                    } else { //pickBlockButton
-                        this.quickCraftingType = AbstractContainerMenu.QUICKCRAFT_TYPE_CLONE;
-                    }
-                }
+        //Simplified click handling for virtual slots (26.1.2 compatible)
+        if (slot.index != -1) {
+            ContainerInput clicktype = ContainerInput.PICKUP;
+            if (hasShiftDown) {
+                clicktype = ContainerInput.QUICK_MOVE;
             }
+            this.slotClicked(slot, slot.index, button, clicktype);
         }
-        this.lastClickSlot = slot;
-        this.lastClickTime = time;
-        this.lastClickButton = button;
-        */
         return true;
     }
 }

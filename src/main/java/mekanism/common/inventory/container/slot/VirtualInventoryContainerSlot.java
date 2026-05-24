@@ -80,10 +80,10 @@ public class VirtualInventoryContainerSlot extends InventoryContainerSlot implem
 
     @Override
     public boolean isActive() {
-        //Only active when the linked window is open. This allows vanilla's getHoveredSlot
-        //(which uses isMouseOverSlot with actual positions) to detect hover correctly.
-        //The hover highlight at (0,0) is suppressed by isHovering returning false.
-        return window != null;
+        //Always false: prevents vanilla from rendering/hovering at slot.x=0,slot.y=0.
+        //Interaction handled by GuiVirtualSlot.mouseClicked -> screen.slotClicked.
+        //Rendering handled by GuiVirtualSlot.drawContents -> updateRenderInfo.
+        return false;
     }
 
     @Override
