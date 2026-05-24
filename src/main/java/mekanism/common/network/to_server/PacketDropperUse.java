@@ -12,7 +12,6 @@ import mekanism.api.fluid.IExtendedFluidTank;
 import mekanism.api.fluid.IMekanismFluidHandler;
 import mekanism.api.radiation.IRadiationManager;
 import mekanism.api.tier.BaseTier;
-import net.minecraft.world.item.ItemStack;
 import mekanism.common.Mekanism;
 import mekanism.common.advancements.MekanismCriteriaTriggers;
 import mekanism.common.advancements.triggers.UseGaugeDropperTrigger.UseDropperAction;
@@ -36,6 +35,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import org.jetbrains.annotations.NotNull;
 
@@ -60,7 +60,7 @@ public record PacketDropperUse(DropperAction action, TankType tankType, int tank
         //todo - 26.1: validate that this successfully gets the tile
         if (tankId >= 0 && context.player() instanceof ServerPlayer player && player.containerMenu instanceof MekanismTileContainer<?> mekTileContainer) {
             ItemStack cursorStack = player.containerMenu.getCarried();
-            ItemResource itemResource = ItemResource.fromStack(cursorStack);
+            ItemResource itemResource = ItemResource.of(cursorStack);
             if (!itemResource.isEmpty() && itemResource.getItem() instanceof ItemGaugeDropper) {
                 TileEntityMekanism tile = mekTileContainer.getTileEntity();
                 if (tile != null) {

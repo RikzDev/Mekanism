@@ -25,6 +25,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
 import org.jetbrains.annotations.Nullable;
 
 final class ChemicalCamoContainerFactory extends CamoContainerFactory<ChemicalCamoContainer> {
@@ -53,8 +54,8 @@ final class ChemicalCamoContainerFactory extends CamoContainerFactory<ChemicalCa
 
     @Override
     @Nullable
-    public ChemicalCamoContainer applyCamo(Level level, BlockPos pos, Player player, Void context) {
-        IChemicalHandler handler = stack.getCapability(Capabilities.CHEMICAL.item());
+    public ChemicalCamoContainer applyCamo(Level level, BlockPos pos, Player player, ItemAccess itemAccess) {
+        IChemicalHandler handler = itemAccess.getResource().toStack().getCapability(Capabilities.CHEMICAL.item());
         if (handler == null || handler.getChemicalTanks() <= 0) {
             return null;
         }
@@ -83,12 +84,12 @@ final class ChemicalCamoContainerFactory extends CamoContainerFactory<ChemicalCa
     }
 
     @Override
-    public boolean removeCamo(Level level, BlockPos pos, Player player, Void context, ChemicalCamoContainer camo) {
+    public boolean removeCamo(Level level, BlockPos pos, Player player, ItemAccess itemAccess, ChemicalCamoContainer camo) {
         if (itemAccess.getResource().isEmpty()) {
             return false;
         }
 
-        IChemicalHandler handler = stack.getCapability(Capabilities.CHEMICAL.item());
+        IChemicalHandler handler = itemAccess.getResource().toStack().getCapability(Capabilities.CHEMICAL.item());
         if (handler == null || handler.getChemicalTanks() <= 0) {
             return false;
         }
