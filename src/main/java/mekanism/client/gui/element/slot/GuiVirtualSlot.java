@@ -64,6 +64,18 @@ public class GuiVirtualSlot extends GuiSlot implements IRecipeViewerIngredientHe
     }
 
     @Override
+    public void renderToolTip(@NotNull GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY) {
+        if (virtualSlot != null) {
+            ItemStack stack = virtualSlot.getStackToRender();
+            if (!stack.isEmpty()) {
+                guiGraphics.setTooltipForNextFrame(gui().font(), stack, mouseX + getGuiLeft(), mouseY + getGuiTop());
+                return;
+            }
+        }
+        super.renderToolTip(guiGraphics, mouseX, mouseY);
+    }
+
+    @Override
     public boolean mouseClicked(@NotNull MouseButtonEvent event, boolean isDoubleClick) {
         if (event.x() >= getX() && event.y() >= getY() && event.x() < getRight() && event.y() < getBottom()) {
             IGuiWrapper gui = gui();

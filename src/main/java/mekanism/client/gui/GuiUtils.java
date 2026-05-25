@@ -67,17 +67,18 @@ public class GuiUtils {
         }
         SpriteContents spriteContents = sprite.contents();
 
-        yPosition = yPosition + desiredHeight - yOffset;
+        int gaugeBottom = yPosition + yOffset;
+        int fillTop = gaugeBottom - desiredHeight;
 
-        guiGraphics.enableScissor(xPosition, yPosition, xPosition + desiredWidth, yOffset + yOffset);
+        guiGraphics.enableScissor(xPosition, fillTop, xPosition + desiredWidth, gaugeBottom);
         {
             guiGraphics.blitTiledSprite(
                   RenderPipelines.GUI_TEXTURED,
                   sprite,
                   xPosition,
-                  yPosition,
+                  fillTop,
                   desiredWidth,
-                  yOffset,
+                  desiredHeight,
                   0,
                   0,
                   spriteContents.width(),
