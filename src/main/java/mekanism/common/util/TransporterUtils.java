@@ -3,6 +3,7 @@ package mekanism.common.util;
 import mekanism.api.RelativeSide;
 import mekanism.api.text.EnumColor;
 import mekanism.common.capabilities.Capabilities;
+import mekanism.common.capabilities.adapter.NeoForgeCapabilityAdapters;
 import mekanism.common.content.network.transmitter.LogisticalTransporterBase;
 import mekanism.common.content.transporter.TransporterManager;
 import mekanism.common.content.transporter.TransporterStack;
@@ -45,7 +46,12 @@ public final class TransporterUtils {
         if (tile instanceof TileEntityTransmitter transmitter && TransmissionType.ITEM.checkTransmissionType(transmitter)) {
             return false;
         }
-        return Capabilities.ITEM.getCapabilityIfLoaded(level, pos, null, tile, side) != null;
+        // Check legacy IItemHandler capability first
+        if (Capabilities.ITEM.getCapabilityIfLoaded(level, pos, null, tile, side) != null) {
+            return true;
+        }
+        // Fall back to NeoForge 26.1 ResourceHandler<ItemResource> capability
+        return NeoForgeCapabilityAdapters.getItemResourceIfLoaded(level, pos, tile, side) != null;
     }
 
     public static EnumColor increment(@Nullable EnumColor color) {

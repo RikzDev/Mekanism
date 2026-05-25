@@ -15,6 +15,7 @@ import mekanism.common.block.attribute.Attribute;
 import mekanism.common.block.attribute.Attributes.AttributeComputerIntegration;
 import mekanism.common.block.attribute.Attributes.AttributeSecurity;
 import mekanism.common.capabilities.Capabilities;
+import mekanism.common.capabilities.adapter.NeoForgeCapabilityAdapters;
 import mekanism.common.integration.computer.ComputerCapabilityHelper;
 import mekanism.common.integration.energy.EnergyCompatUtils;
 import mekanism.common.registration.MekanismDeferredRegister;
@@ -55,6 +56,8 @@ public class TileEntityTypeDeferredRegister extends MekanismDeferredRegister<Blo
               .with(Capabilities.ITEM.block(), CapabilityTileEntity.ITEM_HANDLER_PROVIDER)
               .with(Capabilities.FLUID.block(), CapabilityTileEntity.FLUID_HANDLER_PROVIDER);
         EnergyCompatUtils.addBlockCapabilities(builder);
+        //Register NeoForge 26.1 Transfer API capabilities (ResourceHandler/EnergyHandler)
+        NeoForgeCapabilityAdapters.addNeoForgeCapabilities(builder);
         if (Mekanism.hooks.computerCompatEnabled()) {
             ComputerCapabilityHelper.addComputerCapabilities(builder, () -> Attribute.has(block, AttributeComputerIntegration.class));
         }

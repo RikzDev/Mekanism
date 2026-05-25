@@ -21,6 +21,7 @@ import mekanism.common.lib.transmitter.ConnectionType;
 import mekanism.common.lib.transmitter.TransmissionType;
 import mekanism.common.lib.transmitter.acceptor.AbstractAcceptorCache;
 import mekanism.common.lib.transmitter.acceptor.AcceptorCache;
+import mekanism.common.lib.transmitter.acceptor.NeoForgeFluidAcceptorCache;
 import mekanism.common.tier.PipeTier;
 import mekanism.common.tile.transmitter.TileEntityTransmitter;
 import mekanism.common.upgrade.transmitter.MechanicalPipeUpgradeData;
@@ -57,13 +58,14 @@ public class MechanicalPipe extends BufferedTransmitter<IFluidHandler, FluidNetw
 
     @Override
     protected AbstractAcceptorCache<IFluidHandler, ?> createAcceptorCache() {
-        return new AcceptorCache<>(getTransmitterTile(), Capabilities.FLUID.block());
+        //Use the dual-cache that checks both legacy IFluidHandler AND NeoForge 26.1 ResourceHandler<FluidResource>
+        return new NeoForgeFluidAcceptorCache(getTransmitterTile());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public AcceptorCache<IFluidHandler> getAcceptorCache() {
-        return (AcceptorCache<IFluidHandler>) super.getAcceptorCache();
+    public NeoForgeFluidAcceptorCache getAcceptorCache() {
+        return (NeoForgeFluidAcceptorCache) super.getAcceptorCache();
     }
 
     @Override

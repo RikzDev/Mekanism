@@ -28,6 +28,7 @@ import mekanism.common.lib.transmitter.ConnectionType;
 import mekanism.common.lib.transmitter.TransmissionType;
 import mekanism.common.lib.transmitter.acceptor.AbstractAcceptorCache;
 import mekanism.common.lib.transmitter.acceptor.AcceptorCache;
+import mekanism.common.lib.transmitter.acceptor.NeoForgeItemAcceptorCache;
 import mekanism.common.network.PacketUtils;
 import mekanism.common.network.to_client.transmitter.PacketTransporterBatch;
 import mekanism.common.network.to_client.transmitter.PacketTransporterSync;
@@ -92,13 +93,14 @@ public abstract class LogisticalTransporterBase extends Transmitter<IItemHandler
 
     @Override
     protected AbstractAcceptorCache<IItemHandler, ?> createAcceptorCache() {
-        return new AcceptorCache<>(getTransmitterTile(), Capabilities.ITEM.block());
+        //Use the dual-cache that checks both legacy IItemHandler AND NeoForge 26.1 ResourceHandler<ItemResource>
+        return new NeoForgeItemAcceptorCache(getTransmitterTile());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public AcceptorCache<IItemHandler> getAcceptorCache() {
-        return (AcceptorCache<IItemHandler>) super.getAcceptorCache();
+    public NeoForgeItemAcceptorCache getAcceptorCache() {
+        return (NeoForgeItemAcceptorCache) super.getAcceptorCache();
     }
 
     @Override

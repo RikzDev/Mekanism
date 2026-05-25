@@ -17,6 +17,7 @@ import mekanism.common.content.network.EnergyNetwork;
 import mekanism.common.lib.transmitter.ConnectionType;
 import mekanism.common.lib.transmitter.TransmissionType;
 import mekanism.common.lib.transmitter.acceptor.EnergyAcceptorCache;
+import mekanism.common.lib.transmitter.acceptor.NeoForgeEnergyAcceptorCache;
 import mekanism.common.tier.CableTier;
 import mekanism.common.tile.transmitter.TileEntityTransmitter;
 import mekanism.common.upgrade.transmitter.TransmitterUpgradeData;
@@ -48,13 +49,14 @@ public class UniversalCable extends BufferedTransmitter<IStrictEnergyHandler, En
     }
 
     @Override
-    protected EnergyAcceptorCache createAcceptorCache() {
-        return new EnergyAcceptorCache(getTransmitterTile());
+    protected NeoForgeEnergyAcceptorCache createAcceptorCache() {
+        //Use the dual-cache that checks both legacy energy compats AND NeoForge 26.1 EnergyHandler
+        return new NeoForgeEnergyAcceptorCache(getTransmitterTile());
     }
 
     @Override
-    public EnergyAcceptorCache getAcceptorCache() {
-        return (EnergyAcceptorCache) super.getAcceptorCache();
+    public NeoForgeEnergyAcceptorCache getAcceptorCache() {
+        return (NeoForgeEnergyAcceptorCache) super.getAcceptorCache();
     }
 
     @Override
